@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>azic | 아직 펼치지 못한 책을 위한 브랜드</title>
+    <link rel="stylesheet" href="./src/styles/base.css" />
+    <link rel="stylesheet" href="./src/styles/layout.css" />
+    <link rel="stylesheet" href="./src/styles/components.css" />
+  </head>
+  <body class="is-gated">
+    <div
+      class="landing-gate"
+      id="landingGate"
+      role="button"
+      tabindex="0"
+      aria-label="Click anywhere to enter the azic website"
+    >
+      <div class="landing-copy">
+        <div class="landing-logo-stage">
+          <img
+            id="landingLogo"
+            class="landing-logo"
+            src="./assets/images/landing-logos/Group 24.png"
+            alt="azic 랜딩 로고"
+          />
+        </div>
+      </div>
+
+      <img
+        class="landing-ribbon-image"
+        src="./assets/images/landing-ribbon.png"
+        alt="click anywhere to enter 띠지"
+        aria-hidden="true"
+      />
+    </div>
+
+    <div class="site-shell">
+      <div class="grain" aria-hidden="true"></div>
+
+      <main class="map-home" id="mapHome">
+        <img id="cornerLogo" class="corner-logo" src="./assets/images/landing-logos/Group 24.png" alt="azic logo" />
+
+        <section class="map-viewport" id="mapViewport" aria-label="azic world map">
+          <div class="map-focus-layer" aria-hidden="true"></div>
+
+          <div class="map-canvas" id="mapCanvas">
+            <img
+              id="mapBackground"
+              class="map-bg-art"
+              src="./assets/images/home-map/background.png"
+              alt=""
+              aria-hidden="true"
+              data-desktop-src="./assets/images/home-map/background.png"
+              data-mobile-src="./assets/images/home-map/mobile-background.png"
+            />
+
+            <img
+              id="mapTitle"
+              class="map-title-art"
+              src="./assets/images/home-map/title.png"
+              alt="아직, 읽고자 했던 마음들"
+              data-desktop-src="./assets/images/home-map/title.png"
+              data-mobile-src="./assets/images/home-map/title.png"
+            />
+
+            <button
+              class="map-object map-primary node-about"
+              data-name="about"
+              data-title="About"
+              data-copy="적독러를 다그치지 않고, 읽고자 했던 마음을 긍정하는 azic의 태도와 세계관을 보여줍니다."
+              data-detail="책을 다 읽지 못해도 괜찮다는 감각에서 출발해 브랜드가 사람을 어떻게 대하는지 소개합니다."
+            >
+              <img
+                class="map-object-image"
+                src="./assets/images/home-map/about.png"
+                alt="about 오브젝트"
+                data-desktop-src="./assets/images/home-map/about.png"
+                data-mobile-src="./assets/images/home-map/mobile-about.png"
+              />
+            </button>
+
+            <button
+              class="map-object map-primary node-upload"
+              data-name="upload"
+              data-title="Upload"
+              data-copy="읽지 못한 책과 그 책을 샀던 마음을 남기는 참여 아카이브 구역입니다."
+              data-detail="언젠가 읽고 싶었던 책의 표지, 문장, 변명을 업로드하며 미뤄둔 마음을 기록합니다."
+            >
+              <img
+                class="map-object-image"
+                src="./assets/images/home-map/upload.png"
+                alt="upload 오브젝트"
+                data-desktop-src="./assets/images/home-map/upload.png"
+                data-mobile-src="./assets/images/home-map/mobile-upload.png"
+              />
+            </button>
+
+            <button
+              class="map-object map-primary node-round-robin"
+              data-name="round-robin novel"
+              data-title="Round-robin novel"
+              data-copy="특정 글자 수만큼 금액이 쌓이고, 그 금액이 기부로 이어지는 릴레이 소설 프로젝트입니다."
+              data-detail="개인의 쓰기와 사회적 순환을 연결해 적독 문화가 새로운 공동 창작으로 번지는 장면을 만듭니다."
+            >
+              <img
+                class="map-object-image"
+                src="./assets/images/home-map/round-robin-novel.png"
+                alt="round-robin novel 오브젝트"
+                data-desktop-src="./assets/images/home-map/round-robin-novel.png"
+                data-mobile-src="./assets/images/home-map/mobile-round-robin-novel.png"
+              />
+            </button>
+
+            <button
+              class="map-object map-primary node-product"
+              data-name="product"
+              data-title="Product"
+              data-copy="문진, 책갈피, 미니 협탁처럼 미뤄둔 독서를 일상 속 작은 성취로 바꾸는 물성의 구역입니다."
+              data-detail="한 번에 완독하지 않아도 책 곁에 머무르게 하는 도구들을 통해 브랜드 감각을 실물로 만납니다."
+            >
+              <img
+                class="map-object-image"
+                src="./assets/images/home-map/product.png"
+                alt="product 오브젝트"
+                data-desktop-src="./assets/images/home-map/product.png"
+                data-mobile-src="./assets/images/home-map/mobile-product.png"
+              />
+            </button>
+
+            <button
+              class="map-object map-note note-shelf"
+              data-name="shelf memo"
+              data-title="Shelf memo"
+              data-copy="읽지 못한 책이 놓인 시간까지도 브랜드의 재료로 받아들이는 메모 구역입니다."
+              data-detail="아직 펼치지 못한 마음을 부끄러움 대신 관찰의 언어로 바꾸는 작은 노트입니다."
+            >
+              <span>읽지 못한 마음의 메모</span>
+            </button>
+
+            <button
+              class="map-object map-note note-bazaar"
+              data-name="page bazaar"
+              data-title="Page bazaar"
+              data-copy="페이지 수로 거래하는 작은 바자회와 책 입양 시스템을 상상하는 코너입니다."
+              data-detail="책을 물건이 아니라 관계로 옮겨 놓는 실험. 사유서, 계약서, 위탁서가 함께 놓입니다."
+            >
+              <span>page bazaar</span>
+            </button>
+
+            <button
+              class="map-object map-note note-subway"
+              data-name="subway scene"
+              data-title="Subway scene"
+              data-copy="지하철 풍경을 바꾸는 오프라인 개입처럼, 읽기의 분위기를 공공 장면으로 확장합니다."
+              data-detail="읽는 사람만이 아니라 읽고 싶었던 사람도 자연스럽게 섞이는 문화적 풍경을 상상합니다."
+            >
+              <span>subway scene</span>
+            </button>
+
+            <button
+              class="map-object map-note note-weather"
+              data-name="reading weather"
+              data-title="Reading weather"
+              data-copy="오늘의 독서 압력 대신, 읽고 싶은 마음의 날씨를 체크하는 감각적 표지판입니다."
+              data-detail="해야 한다는 명령을 덜어내고 지금의 기분으로 책과 연결되는 방식을 제안합니다."
+            >
+              <span>reading weather</span>
+            </button>
+
+            <button
+              class="map-object map-note note-adoption"
+              data-name="book adoption"
+              data-title="Book adoption"
+              data-copy="책을 입양하듯 주고받는 장면을 상상하는 보관 카드입니다."
+              data-detail="누군가의 책장에 오래 머문 책이 다른 사람의 타이밍에서 다시 펼쳐질 수 있도록 이어줍니다."
+            >
+              <span>book adoption</span>
+            </button>
+          </div>
+
+          <div class="map-tooltip" id="mapTooltip" aria-hidden="true">
+            <strong id="mapTooltipTitle">About</strong>
+            <p id="mapTooltipCopy">적독러를 다그치지 않고, 읽고자 했던 마음을 긍정하는 azic의 태도와 세계관을 보여줍니다.</p>
+          </div>
+
+
+        </section>
+
+        <p class="map-welcome-fixed">azic world에 오신 것을 환영합니다. 화면을 천천히 훑어보세요.</p>
+
+        <div class="editor-center-marker" id="editorCenterMarker" hidden aria-hidden="true">
+          <span class="editor-center-marker__v"></span>
+          <span class="editor-center-marker__h"></span>
+          <span class="editor-center-marker__dot"></span>
+        </div>
+
+        <aside class="editor-panel" id="editorPanel" hidden aria-label="local editor panel">
+          <div class="editor-panel__header">
+            <strong>Editor</strong>
+            <span>Shift + D</span>
+          </div>
+          <label class="editor-panel__field">
+            <span>Target</span>
+            <select id="editorTarget">
+              <option value="mapTitle">Main title</option>
+              <option value="mapBackground">Background</option>
+              <option value="about">About</option>
+              <option value="upload">Upload</option>
+              <option value="roundRobin">Round-robin</option>
+              <option value="product">Product</option>
+              <option value="cornerLogo">Corner logo</option>
+            </select>
+          </label>
+          <label class="editor-panel__field">
+            <span>X</span>
+            <input id="editorX" type="number" step="1" />
+          </label>
+          <label class="editor-panel__field">
+            <span>Y</span>
+            <input id="editorY" type="number" step="1" />
+          </label>
+          <label class="editor-panel__field">
+            <span>Width</span>
+            <input id="editorWidth" type="number" step="1" min="1" />
+          </label>
+          <label class="editor-panel__field">
+            <span>Scale</span>
+            <input id="editorScale" type="number" step="0.01" min="0.1" />
+          </label>
+          <label class="editor-panel__field">
+            <span>Opacity</span>
+            <input id="editorOpacity" type="number" step="0.05" min="0" max="1" />
+          </label>
+          <label class="editor-panel__field">
+            <span>Rotation</span>
+            <input id="editorRotation" type="number" step="0.5" />
+          </label>
+          <div class="editor-panel__actions">
+            <button id="editorResetTarget" type="button">Reset target</button>
+            <button id="editorResetAll" type="button">Reset all</button>
+          </div>
+          <button id="editorCopy" class="editor-panel__copy" type="button">Copy layout JSON</button>
+          <p class="editor-panel__hint">로컬 편집 모드입니다. 방문자는 볼 수 없습니다.</p>
+        </aside>
+
+      </main>
+    </div>
+
+    <script src="./src/scripts/main.js"></script>
+  </body>
+</html>
