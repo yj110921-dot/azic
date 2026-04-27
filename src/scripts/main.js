@@ -429,8 +429,12 @@ const enterSite = () => {
     centerMapView();
     requestParallax();
   };
+  requestAnimationFrame(() => {
+    requestAnimationFrame(runCenteringPass);
+  });
   window.setTimeout(runCenteringPass, 40);
   window.setTimeout(runCenteringPass, 260);
+  window.setTimeout(runCenteringPass, 620);
 };
 
 interactiveObjects.forEach((object) => {
