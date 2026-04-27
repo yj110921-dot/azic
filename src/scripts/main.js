@@ -85,9 +85,7 @@ const LAYOUT_PRESETS = {
   },
 };
 
-const ENTRY_VIEW_PRESETS = {
-  desktop: { left: 980, top: 780 },
-};
+const ENTRY_VIEW_PRESETS = {};
 
 const pickRandomLogo = () => logoFrames[Math.floor(Math.random() * logoFrames.length)];
 
