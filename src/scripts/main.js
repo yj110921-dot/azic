@@ -452,6 +452,10 @@ interactiveObjects.forEach((object) => {
       return;
     }
     updateInfoPanel(object);
+    const href = object.dataset.href;
+    if (href) {
+      window.location.href = href;
+    }
   });
 });
 
