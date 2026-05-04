@@ -76,11 +76,11 @@ const editorDefaults = { desktop: {}, mobile: {} };
 let currentLayoutMode = MOBILE_LAYOUT_QUERY.matches ? 'mobile' : 'desktop';
 const LAYOUT_PRESETS = {
   desktop: {
-    mapTitle: { x: 2099, y: 960, width: 970, scale: 0.74, opacity: 1, rotation: 0 },
-    about: { x: 2372, y: 1060, width: 124, scale: 1.91, opacity: 1, rotation: -8 },
-    upload: { x: 1769, y: 1490, width: 79, scale: 1.59, opacity: 1, rotation: -33 },
-    roundRobin: { x: 2394, y: 1468, width: 190, scale: 1.74, opacity: 1, rotation: 4.5 },
-    product: { x: 1672, y: 1046, width: 179, scale: 1.86, opacity: 1, rotation: 3.5 },
+    mapTitle: { x: 2094, y: 820, width: 970, scale: 0.74, opacity: 1, rotation: 0 },
+    about: { x: 2372, y: 930, width: 124, scale: 1.91, opacity: 1, rotation: -8 },
+    upload: { x: 1769, y: 1325, width: 79, scale: 1.59, opacity: 1, rotation: -33 },
+    roundRobin: { x: 2394, y: 1301, width: 190, scale: 1.74, opacity: 1, rotation: 4.5 },
+    product: { x: 1672, y: 900, width: 179, scale: 1.86, opacity: 1, rotation: 3.5 },
     cornerLogo: { x: 24, y: 20, width: 108, scale: 1, opacity: 0.92, rotation: 0 },
   },
   mobile: {
@@ -540,6 +540,36 @@ const clearMotionPointer = () => {
 };
 
 
+const updateTooltipPosition = (element, pointer = null) => {
+  if (!element || !mapTooltip) return;
+  const rect = element.getBoundingClientRect();
+  const tooltipRect = mapTooltip.getBoundingClientRect();
+  const margin = 18;
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  let left = (pointer?.x ?? rect.right) + 18;
+  let top = (pointer?.y ?? (rect.top + rect.height * 0.5)) - tooltipRect.height * 0.5;
+
+  if (left + tooltipRect.width > viewportWidth - margin) {
+    left = rect.left - tooltipRect.width - 18;
+  }
+
+  if (left < margin) {
+    left = Math.min(viewportWidth - tooltipRect.width - margin, rect.right + 18);
+  }
+
+  if (top + tooltipRect.height > viewportHeight - margin) {
+    top = viewportHeight - tooltipRect.height - margin;
+  }
+  if (top < margin) {
+    top = margin;
+  }
+
+  mapTooltip.style.left = `${Math.round(left)}px`;
+  mapTooltip.style.top = `${Math.round(top)}px`;
+};
+
 const setActiveObject = (element, pointer = null) => {
   activeObject = element;
   mapHome?.classList.add('has-focus');
@@ -635,6 +665,12 @@ window.addEventListener('resize', () => {
   centerMapView();
   requestParallax();
 });
+if (window.location.hash === '#story') {
+  requestAnimationFrame(() => {
+    enterSite();
+  });
+}
+
 window.addEventListener('load', () => {
   currentLayoutMode = getLayoutMode();
   initializeEditorLayout(currentLayoutMode);

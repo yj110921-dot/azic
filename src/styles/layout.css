@@ -41,7 +41,7 @@
 .map-canvas {
   height: 3400px;
   left: 0;
-  position: absolute;
+  position: fixed;
   top: 0;
   transform-origin: top left;
   width: 4300px;

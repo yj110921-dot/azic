@@ -278,6 +278,90 @@
   padding-top: 22px;
 }
 
+
+.about-message__editable.is-selected {
+  outline: 2px dashed rgba(226, 32, 32, 0.92);
+  outline-offset: 6px;
+}
+
+.about-message-editor {
+  background: rgba(255, 249, 241, 0.96);
+  border: 1px solid rgba(33, 26, 16, 0.14);
+  border-radius: 14px;
+  bottom: 24px;
+  box-shadow: 0 18px 40px rgba(33, 26, 16, 0.18);
+  color: #211a10;
+  padding: 14px;
+  position: fixed;
+  right: 24px;
+  width: 240px;
+  z-index: 120;
+}
+
+.about-message-editor[hidden] {
+  display: none;
+}
+
+.about-message-editor__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.about-message-editor__header strong {
+  font-size: 0.95rem;
+}
+
+.about-message-editor__header span,
+.about-message-editor__hint {
+  color: rgba(33, 26, 16, 0.58);
+  font-size: 0.72rem;
+}
+
+.about-message-editor__field {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.about-message-editor__field span {
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.about-message-editor__field input,
+.about-message-editor__field select,
+.about-message-editor__actions button,
+.about-message-editor__copy {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(33, 26, 16, 0.14);
+  border-radius: 8px;
+  color: inherit;
+  font: inherit;
+  min-height: 36px;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.about-message-editor__actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  margin: 10px 0 8px;
+}
+
+.about-message-editor__copy {
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .about-message-editor {
+    display: none;
+  }
+}
+
 @media (max-width: 900px) {
   .page-header {
     align-items: flex-start;
@@ -314,14 +398,6 @@
   display: block;
   filter: brightness(0) saturate(100%);
   width: 108px;
-}
-
-.page-corner-logo span {
-  color: #211a10;
-  display: block;
-  font-family: "YoonChildfundkoreaManSeh", cursive;
-  font-size: 1.1rem;
-  margin-top: 6px;
 }
 
 .about-page {
@@ -541,25 +617,121 @@
 
 .about-message {
   background: #b79c74;
-  border-radius: 8px;
-  margin: 96px auto 0;
-  max-width: 1280px;
-  padding: 42px 28px 36px;
+  margin: 116px auto 0;
+  max-width: 1480px;
+  min-height: 2920px;
+  overflow: hidden;
+  padding: 86px 52px 72px;
+  position: relative;
 }
 
-
-.about-message__grid {
-  display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 28px;
+.about-message__header {
+  display: flex;
+  justify-content: center;
 }
 
-.about-message__card {
-  background: rgba(242, 231, 218, 0.88);
-  border-radius: 8px;
-  min-height: 460px;
-  padding: 28px;
+.about-message__header h2 {
+  font-size: clamp(2.1rem, 3vw, 3rem);
+  text-align: center;
+}
+
+.about-message__canvas {
+  min-height: 2660px;
+  position: relative;
+}
+
+.about-message__photo {
+  box-shadow: 0 28px 38px rgba(33, 26, 16, 0.18);
+  display: block;
+  position: absolute;
+  z-index: 3;
+}
+
+.about-message__photo--yejin-main {
+  right: 72px;
+  top: 120px;
+  transform: rotate(9deg);
+  width: 400px;
+}
+
+.about-message__photo--yejin-side {
+  right: 102px;
+  top: 456px;
+  transform: rotate(-9deg);
+  width: 340px;
+}
+
+.about-message__photo--sebin {
+  left: 96px;
+  top: 930px;
+  transform: rotate(-2deg);
+  width: 246px;
+  z-index: 4;
+}
+
+.about-message__photo--detail {
+  left: 214px;
+  top: 1128px;
+  transform: rotate(-7deg);
+  width: 304px;
+}
+
+.about-message__photo--yeji-main {
+  left: 706px;
+  top: 1716px;
+  transform: rotate(7deg);
+  width: 262px;
+  z-index: 4;
+}
+
+.about-message__photo--yeji-side {
+  left: 286px;
+  top: 2048px;
+  transform: rotate(-7deg);
+  width: 318px;
+}
+
+.about-message__photo--yewon {
+  left: 74px;
+  top: 2608px;
+  transform: rotate(-6deg);
+  width: 254px;
+  z-index: 4;
+}
+
+.about-message__note {
+  background: #ffffff;
+  box-shadow: 0 22px 34px rgba(33, 26, 16, 0.18);
+  position: absolute;
+  z-index: 2;
+}
+
+.about-message__note--yejin {
+  left: 20px;
+  padding: 56px 48px 48px;
+  top: 214px;
+  width: min(100%, 760px);
+}
+
+.about-message__note--sebin {
+  top: 978px;
+  padding: 34px 32px 30px;
+  right: 82px;
+  width: min(100%, 484px);
+}
+
+.about-message__note--yeji {
+  left: 86px;
+  padding: 30px 28px 26px;
+  top: 1708px;
+  width: min(100%, 248px);
+}
+
+.about-message__note--yewon {
+  top: 2638px;
+  padding: 34px 32px 30px;
+  right: 42px;
+  width: min(100%, 510px);
 }
 
 .about-message__text {
@@ -568,15 +740,49 @@
 }
 
 .about-message__text p {
-  font-family: "Pretendard Variable", "Pretendard", sans-serif;
-  font-size: clamp(1.05rem, 1.4vw, 1.56rem);
-  font-variation-settings: "wght" 400;
-  line-height: 1.72;
+  font-family: "YoonChildfundkoreaManSeh", cursive;
+  font-size: clamp(1rem, 1.18vw, 1.24rem);
+  line-height: 1.52;
   margin: 0;
 }
 
 .about-signature {
   font-variation-settings: "wght" 700 !important;
+}
+
+@media (max-width: 900px) {
+  .about-message {
+    margin-top: 76px;
+    min-height: auto;
+    padding: 42px 18px 34px;
+  }
+
+  .about-message__canvas {
+    display: grid;
+    gap: 24px;
+    margin-top: 28px;
+    min-height: auto;
+    position: static;
+  }
+
+  .about-message__photo,
+  .about-message__note {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+
+  .about-message__note--yejin,
+  .about-message__note--sebin,
+  .about-message__note--yeji,
+  .about-message__note--yewon {
+    padding: 28px 22px;
+  }
+
+  .about-message__text p {
+    font-size: 1rem;
+    line-height: 1.68;
+  }
 }
 
 .about-archive {
