@@ -5,6 +5,7 @@ const cornerLogo = document.getElementById("cornerLogo");
 const mapViewport = document.getElementById("mapViewport");
 const mapCanvas = document.getElementById("mapCanvas");
 const mapHome = document.getElementById("mapHome");
+const deskChaosLayer = document.getElementById("deskChaosLayer");
 const mapTooltip = document.getElementById("mapTooltip");
 const mapTooltipTitle = document.getElementById("mapTooltipTitle");
 const mapTooltipCopy = document.getElementById("mapTooltipCopy");
@@ -39,23 +40,32 @@ let dragStartX = 0;
 let dragStartY = 0;
 let dragScrollLeft = 0;
 let dragScrollTop = 0;
-let targetScrollLeft = 0;
-let targetScrollTop = 0;
-let bgScrollLeft = 0;
-let bgScrollTop = 0;
-let titleScrollLeft = 0;
-let titleScrollTop = 0;
-let objectScrollLeft = 0;
-let objectScrollTop = 0;
-let noteScrollLeft = 0;
-let noteScrollTop = 0;
 let parallaxFrameId = null;
-const EDITOR_KEY = 'azic-local-editor-v2';
+let stageScale = 1;
+let stageOffsetX = 0;
+let stageOffsetY = 0;
+let pointerTargetX = 0;
+let pointerTargetY = 0;
+let bgShiftStateX = 0;
+let bgShiftStateY = 0;
+let titleShiftStateX = 0;
+let titleShiftStateY = 0;
+let objectShiftStateX = 0;
+let objectShiftStateY = 0;
+let noteShiftStateX = 0;
+let noteShiftStateY = 0;
+let chaosFrameId = null;
+let deskChaosBuildToken = 0;
+const deskChaosItems = [];
+const deskChaosPointer = { active: false, x: 0, y: 0 };
+let deskChaosBounds = null;
+const DESK_CHAOS_COUNT = 27;
+const deskChaosSources = Array.from({ length: DESK_CHAOS_COUNT }, (_, index) => `./assets/images/desk-chaos/${index + 1}.png`);
+const EDITOR_KEY = 'azic-local-editor-v4';
 const MOBILE_LAYOUT_QUERY = window.matchMedia('(max-width: 900px)');
 const isLocalEditor = location.protocol === 'file:';
 const editorTargets = {
   mapTitle: document.getElementById('mapTitle'),
-  mapBackground: document.getElementById('mapBackground'),
   about: document.querySelector('.node-about'),
   upload: document.querySelector('.node-upload'),
   roundRobin: document.querySelector('.node-round-robin'),
@@ -66,21 +76,19 @@ const editorDefaults = { desktop: {}, mobile: {} };
 let currentLayoutMode = MOBILE_LAYOUT_QUERY.matches ? 'mobile' : 'desktop';
 const LAYOUT_PRESETS = {
   desktop: {
-    mapTitle: { x: 2105, y: 1312, width: 880, scale: 0.74, opacity: 1, rotation: 0 },
-    mapBackground: { x: 2099, y: -193, width: 3978, scale: 0.42, opacity: 1, rotation: 0 },
-    about: { x: 2138, y: 1210, width: 119, scale: 1.91, opacity: 1, rotation: -8 },
-    upload: { x: 1731, y: 1720, width: 71, scale: 1.37, opacity: 1, rotation: -14.5 },
-    roundRobin: { x: 1995, y: 1755, width: 162, scale: 1.74, opacity: 1, rotation: 4.5 },
-    product: { x: 1546, y: 1209, width: 172, scale: 1.86, opacity: 1, rotation: 3.5 },
+    mapTitle: { x: 2099, y: 960, width: 970, scale: 0.74, opacity: 1, rotation: 0 },
+    about: { x: 2372, y: 1060, width: 124, scale: 1.91, opacity: 1, rotation: -8 },
+    upload: { x: 1769, y: 1490, width: 79, scale: 1.59, opacity: 1, rotation: -33 },
+    roundRobin: { x: 2394, y: 1468, width: 190, scale: 1.74, opacity: 1, rotation: 4.5 },
+    product: { x: 1672, y: 1046, width: 179, scale: 1.86, opacity: 1, rotation: 3.5 },
     cornerLogo: { x: 24, y: 20, width: 108, scale: 1, opacity: 0.92, rotation: 0 },
   },
   mobile: {
-    mapTitle: { x: 1100, y: 1240, width: 180, scale: 1, opacity: 1, rotation: 0 },
-    mapBackground: { x: 1083, y: 1017, width: 387, scale: 1.07, opacity: 1, rotation: 0 },
-    about: { x: 1029, y: 1090, width: 59, scale: 1.07, opacity: 1, rotation: 48 },
-    upload: { x: 903, y: 1252, width: 41, scale: 0.89, opacity: 1, rotation: -4 },
-    roundRobin: { x: 974, y: 1263, width: 110, scale: 0.97, opacity: 1, rotation: -7 },
-    product: { x: 825, y: 1066, width: 110, scale: 0.91, opacity: 1, rotation: -6 },
+    mapTitle: { x: 1100, y: 1195, width: 180, scale: 1, opacity: 1, rotation: 0 },
+    about: { x: 1157, y: 1190, width: 59, scale: 1.07, opacity: 1, rotation: 48 },
+    upload: { x: 1010, y: 1298, width: 39, scale: 0.89, opacity: 1, rotation: -12.5 },
+    roundRobin: { x: 1153, y: 1288, width: 99, scale: 0.97, opacity: 1, rotation: -7 },
+    product: { x: 958, y: 1172, width: 103, scale: 0.91, opacity: 1, rotation: -0.5 },
     cornerLogo: { x: 24, y: 20, width: 108, scale: 1, opacity: 0.92, rotation: 0 },
   },
 };
@@ -88,6 +96,191 @@ const LAYOUT_PRESETS = {
 const ENTRY_VIEW_PRESETS = {};
 
 const pickRandomLogo = () => logoFrames[Math.floor(Math.random() * logoFrames.length)];
+
+const createSeededRandom = (seed) => {
+  let value = seed >>> 0;
+  return () => {
+    value += 0x6D2B79F5;
+    let t = value;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
+const rectsOverlap = (a, b, padding = 0) => !(
+  a.x + a.width + padding < b.x ||
+  b.x + b.width + padding < a.x ||
+  a.y + a.height + padding < b.y ||
+  b.y + b.height + padding < a.y
+);
+
+const loadDeskChaosAssetMeta = () => Promise.all(
+  deskChaosSources.map((src) => new Promise((resolve) => {
+    const probe = new Image();
+    probe.onload = () => resolve({ src, width: probe.naturalWidth || 100, height: probe.naturalHeight || 100 });
+    probe.onerror = () => resolve({ src, width: 100, height: 100 });
+    probe.src = src;
+  }))
+);
+
+const getTitleExclusionRect = (mode) => {
+  const title = editorTargets.mapTitle;
+  const preset = LAYOUT_PRESETS[mode]?.mapTitle || getEditorMetrics(title);
+  const ratio = title && title.naturalWidth && title.naturalHeight
+    ? title.naturalHeight / title.naturalWidth
+    : 1;
+  const renderedWidth = preset.width * preset.scale;
+  const renderedHeight = renderedWidth * ratio;
+  const padX = mode === 'mobile' ? 150 : 340;
+  const padY = mode === 'mobile' ? 150 : 280;
+  return {
+    x: preset.x - renderedWidth * 0.5 - padX,
+    y: preset.y - padY,
+    width: renderedWidth + padX * 2,
+    height: renderedHeight + padY * 2,
+  };
+};
+
+const requestDeskChaosFrame = () => {
+  if (chaosFrameId !== null) return;
+  chaosFrameId = requestAnimationFrame(() => {
+    let needsMore = false;
+    deskChaosItems.forEach((item) => {
+      if (deskChaosPointer.active) {
+        const centerX = item.x + item.width * 0.5;
+        const centerY = item.y + item.height * 0.5;
+        const dx = centerX - deskChaosPointer.x;
+        const dy = centerY - deskChaosPointer.y;
+        const distance = Math.hypot(dx, dy) || 0.0001;
+        if (distance < item.radius) {
+          const force = (1 - distance / item.radius);
+          item.vx += (dx / distance) * force * item.pushPower;
+          item.vy += (dy / distance) * force * item.pushPower;
+        }
+      }
+
+      item.vx *= 0.94;
+      item.vy *= 0.94;
+      item.x += item.vx;
+      item.y += item.vy;
+
+      if (deskChaosBounds) {
+        const minX = deskChaosBounds.minX;
+        const maxX = deskChaosBounds.maxX - item.width;
+        const minY = deskChaosBounds.minY;
+        const maxY = deskChaosBounds.maxY - item.height;
+        if (item.x < minX) {
+          item.x = minX;
+          item.vx = Math.abs(item.vx) * 0.68;
+        }
+        if (item.x > maxX) {
+          item.x = maxX;
+          item.vx = -Math.abs(item.vx) * 0.68;
+        }
+        if (item.y < minY) {
+          item.y = minY;
+          item.vy = Math.abs(item.vy) * 0.68;
+        }
+        if (item.y > maxY) {
+          item.y = maxY;
+          item.vy = -Math.abs(item.vy) * 0.68;
+        }
+      }
+
+      item.element.style.left = `${item.x.toFixed(2)}px`;
+      item.element.style.top = `${item.y.toFixed(2)}px`;
+      item.element.style.transform = `rotate(${item.rotation}deg)`;
+
+      if (deskChaosPointer.active || Math.abs(item.vx) > 0.06 || Math.abs(item.vy) > 0.06) {
+        needsMore = true;
+      }
+    });
+    chaosFrameId = null;
+    if (needsMore) requestDeskChaosFrame();
+  });
+};
+
+const clearDeskChaosPointer = () => {
+  deskChaosPointer.active = false;
+  requestDeskChaosFrame();
+};
+
+const buildDeskChaosLayer = async () => {
+  if (!deskChaosLayer || !mapCanvas) return;
+  const token = ++deskChaosBuildToken;
+  const mode = getLayoutMode();
+  const rng = Math.random;
+  const assets = await loadDeskChaosAssetMeta();
+  if (token !== deskChaosBuildToken) return;
+
+  deskChaosLayer.innerHTML = '';
+  deskChaosItems.length = 0;
+
+  const canvasWidth = mapCanvas.offsetWidth || (mode === 'mobile' ? 2200 : 4300);
+  const canvasHeight = mapCanvas.offsetHeight || (mode === 'mobile' ? 2900 : 3400);
+  const viewport = getViewportMetrics();
+  const fitScale = getStageFitScale();
+  const visibleWidth = viewport.width / Math.max(fitScale, 0.001);
+  const visibleHeight = viewport.height / Math.max(fitScale, 0.001);
+  const margin = mode === 'mobile' ? 20 : 34;
+  const titleExclusion = getTitleExclusionRect(mode);
+  const titleCenterX = titleExclusion.x + titleExclusion.width * 0.5;
+  const titleCenterY = titleExclusion.y + titleExclusion.height * 0.5;
+  deskChaosBounds = {
+    minX: Math.max(margin, titleCenterX - visibleWidth * (mode === 'mobile' ? 0.42 : 0.44)),
+    maxX: Math.min(canvasWidth - margin, titleCenterX + visibleWidth * (mode === 'mobile' ? 0.42 : 0.44)),
+    minY: Math.max(margin, titleCenterY - visibleHeight * (mode === 'mobile' ? 0.38 : 0.40)),
+    maxY: Math.min(canvasHeight - margin, titleCenterY + visibleHeight * (mode === 'mobile' ? 0.44 : 0.46)),
+  };
+
+  const entries = [];
+  assets.forEach((asset) => {
+    const copies = 1 + Math.floor(rng() * 7);
+    for (let i = 0; i < copies; i += 1) entries.push(asset);
+  });
+  entries.sort(() => rng() - 0.5);
+
+  const width = mode === 'mobile' ? 58 : 92;
+
+  entries.forEach((asset) => {
+    const height = Math.round(width * (asset.height / asset.width));
+    let x = 0;
+    let y = 0;
+    let tries = 0;
+    do {
+      const spreadX = (rng() + rng() + rng()) / 3;
+      const spreadY = (rng() + rng() + rng()) / 3;
+      x = deskChaosBounds.minX + spreadX * Math.max(1, deskChaosBounds.maxX - deskChaosBounds.minX - width);
+      y = deskChaosBounds.minY + spreadY * Math.max(1, deskChaosBounds.maxY - deskChaosBounds.minY - height);
+      tries += 1;
+    } while (rectsOverlap({ x, y, width, height }, titleExclusion, mode === 'mobile' ? 18 : 24) && tries < 24);
+
+    const element = document.createElement('img');
+    element.className = 'desk-chaos-item';
+    element.src = asset.src;
+    element.alt = '';
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
+    element.style.width = `${width}px`;
+    const rotation = (rng() * 58 - 29).toFixed(2);
+    deskChaosLayer.appendChild(element);
+    deskChaosItems.push({
+      element,
+      x,
+      y,
+      width,
+      height,
+      rotation,
+      vx: 0,
+      vy: 0,
+      radius: mode === 'mobile' ? 170 : 260,
+      pushPower: mode === 'mobile' ? 3.8 : 5.6,
+    });
+  });
+
+  requestDeskChaosFrame();
+};
 
 const getEditorMetrics = (element) => {
   if (!element) return { x: 0, y: 0, width: 0, scale: 1, opacity: 1, rotation: 0 };
@@ -109,7 +302,7 @@ const applyEditorTransform = (element, key, values) => {
   element.style.opacity = `${values.opacity}`;
   element.dataset.editorScale = `${values.scale}`;
   element.style.setProperty('--editor-scale', `${values.scale}`);
-  if (!(key === 'mapTitle' || key === 'mapBackground' || key === 'cornerLogo')) {
+  if (!(key === 'mapTitle' || key === 'cornerLogo')) {
     element.style.setProperty('--rotation', `${values.rotation}deg`);
   }
 };
@@ -127,7 +320,7 @@ const clearEditorTransforms = () => {
     element.style.opacity = '';
     element.dataset.editorScale = '1';
     element.style.removeProperty('--editor-scale');
-    if (!(key === 'mapTitle' || key === 'mapBackground' || key === 'cornerLogo')) {
+    if (!(key === 'mapTitle' || key === 'cornerLogo')) {
       element.style.removeProperty('--rotation');
     }
   });
@@ -202,6 +395,7 @@ const updateSelectedEditorTarget = () => {
     rotation: parseFloat(editorRotation.value || 0),
   };
   applyEditorTransform(element, key, values);
+  if (key === "mapTitle") buildDeskChaosLayer();
   saveEditorLayout();
 };
 
@@ -232,36 +426,24 @@ const applyResponsiveSources = () => {
   });
 };
 
-const syncScrollTargets = () => {
-  if (!mapViewport) return;
-  targetScrollLeft = mapViewport.scrollLeft;
-  targetScrollTop = mapViewport.scrollTop;
-  if (!bgScrollLeft && !bgScrollTop && !titleScrollLeft && !titleScrollTop && !objectScrollLeft && !objectScrollTop && !noteScrollLeft && !noteScrollTop) {
-    bgScrollLeft = titleScrollLeft = objectScrollLeft = noteScrollLeft = targetScrollLeft;
-    bgScrollTop = titleScrollTop = objectScrollTop = noteScrollTop = targetScrollTop;
-  }
-};
+const getViewportMetrics = () => ({
+  width: mapViewport?.clientWidth || window.innerWidth,
+  height: mapViewport?.clientHeight || window.innerHeight,
+});
 
-const clampTargets = () => {
-  if (!mapViewport) return;
-  const maxLeft = Math.max(0, mapViewport.scrollWidth - mapViewport.clientWidth);
-  const maxTop = Math.max(0, mapViewport.scrollHeight - mapViewport.clientHeight);
-  targetScrollLeft = Math.min(maxLeft, Math.max(0, targetScrollLeft));
-  targetScrollTop = Math.min(maxTop, Math.max(0, targetScrollTop));
+const getStageFitScale = () => {
+  const mode = getLayoutMode();
+  const { width, height } = getViewportMetrics();
+  if (mode === 'mobile') {
+    const mobileScale = Math.min(width / 430, height / 930);
+    return Math.max(0.82, Math.min(1.18, mobileScale));
+  }
+  const desktopScale = Math.min(width / 1760, height / 1220);
+  return Math.max(0.74, Math.min(1.08, desktopScale));
 };
 
 const centerMapView = () => {
-  if (!mapViewport) return;
-  const mode = getLayoutMode();
-  const maxLeft = Math.max(0, mapViewport.scrollWidth - mapViewport.clientWidth);
-  const maxTop = Math.max(0, mapViewport.scrollHeight - mapViewport.clientHeight);
-  const preset = ENTRY_VIEW_PRESETS[mode];
-  if (preset) {
-    mapViewport.scrollLeft = Math.min(maxLeft, Math.max(0, preset.left));
-    mapViewport.scrollTop = Math.min(maxTop, Math.max(0, preset.top));
-    syncScrollTargets();
-    return;
-  }
+  if (!mapViewport || !mapCanvas) return;
   const title = editorTargets.mapTitle;
   if (!title) return;
   const metrics = getEditorMetrics(title);
@@ -271,98 +453,59 @@ const centerMapView = () => {
   const renderedHeight = metrics.width * naturalRatio * metrics.scale;
   const centerX = metrics.x;
   const centerY = metrics.y + renderedHeight * 0.5;
-  const nextLeft = Math.min(maxLeft, Math.max(0, centerX - mapViewport.clientWidth * 0.5));
-  const nextTop = Math.min(maxTop, Math.max(0, centerY - mapViewport.clientHeight * 0.5));
-  mapViewport.scrollLeft = nextLeft;
-  mapViewport.scrollTop = nextTop;
-  syncScrollTargets();
-};
-
-const updateTooltipPosition = (element) => {
-  if (!mapTooltip || !mapViewport || !element) return;
-  const viewportRect = mapViewport.getBoundingClientRect();
-  const rect = element.getBoundingClientRect();
-  const tooltipX = Math.min(
-    Math.max(rect.left - viewportRect.left + rect.width * 0.5 + 24, 18),
-    viewportRect.width - 300
-  );
-  const tooltipY = Math.min(
-    Math.max(rect.top - viewportRect.top - 28, 18),
-    viewportRect.height - 120
-  );
-  mapTooltip.style.left = `${tooltipX}px`;
-  mapTooltip.style.top = `${tooltipY}px`;
+  const viewport = getViewportMetrics();
+  stageScale = getStageFitScale();
+  stageOffsetX = viewport.width * 0.5 - centerX * stageScale;
+  stageOffsetY = viewport.height * 0.5 - centerY * stageScale;
+  mapCanvas.style.transform = `translate3d(${stageOffsetX}px, ${stageOffsetY}px, 0) scale(${stageScale})`;
 };
 
 const updateParallax = () => {
   if (!mapHome) return;
-
-  const bgShiftX = (-bgScrollLeft * 0.012) + (-bgScrollTop * 0.003);
-  const bgShiftY = (-bgScrollTop * 0.012) + (-bgScrollLeft * 0.003);
-
-  const titleShiftX = (-titleScrollLeft * 0.026) + (-titleScrollTop * 0.01);
-  const titleShiftY = (-titleScrollTop * 0.026) + (-titleScrollLeft * 0.01);
-
-  const objectShiftX = (objectScrollLeft * 0.075) + (objectScrollTop * 0.03);
-  const objectShiftY = (objectScrollTop * 0.075) + (objectScrollLeft * 0.03);
-
-  const noteShiftX = (noteScrollLeft * 0.05) + (noteScrollTop * 0.018);
-  const noteShiftY = (noteScrollTop * 0.05) + (noteScrollLeft * 0.018);
-
-  mapHome.style.setProperty('--bg-shift-x', `${bgShiftX}px`);
-  mapHome.style.setProperty('--bg-shift-y', `${bgShiftY}px`);
-  mapHome.style.setProperty('--title-shift-x', `${titleShiftX}px`);
-  mapHome.style.setProperty('--title-shift-y', `${titleShiftY}px`);
-  mapHome.style.setProperty('--object-shift-x', `${objectShiftX}px`);
-  mapHome.style.setProperty('--object-shift-y', `${objectShiftY}px`);
-  mapHome.style.setProperty('--note-shift-x', `${noteShiftX}px`);
-  mapHome.style.setProperty('--note-shift-y', `${noteShiftY}px`);
+  mapHome.style.setProperty('--bg-shift-x', `${bgShiftStateX}px`);
+  mapHome.style.setProperty('--bg-shift-y', `${bgShiftStateY}px`);
+  mapHome.style.setProperty('--title-shift-x', `${titleShiftStateX}px`);
+  mapHome.style.setProperty('--title-shift-y', `${titleShiftStateY}px`);
+  mapHome.style.setProperty('--object-shift-x', `${objectShiftStateX}px`);
+  mapHome.style.setProperty('--object-shift-y', `${objectShiftStateY}px`);
+  mapHome.style.setProperty('--note-shift-x', `${noteShiftStateX}px`);
+  mapHome.style.setProperty('--note-shift-y', `${noteShiftStateY}px`);
 };
 
 const animateParallax = () => {
-  if (!mapViewport) {
-    parallaxFrameId = null;
-    return;
-  }
+  const bgTargetX = pointerTargetX * 8 + pointerTargetY * 3;
+  const bgTargetY = pointerTargetY * 8 + pointerTargetX * 3;
+  const titleTargetX = pointerTargetX * 16 + pointerTargetY * 6;
+  const titleTargetY = pointerTargetY * 16 + pointerTargetX * 6;
+  const objectTargetX = pointerTargetX * 34 + pointerTargetY * 14;
+  const objectTargetY = pointerTargetY * 34 + pointerTargetX * 14;
+  const noteTargetX = pointerTargetX * 22 + pointerTargetY * 9;
+  const noteTargetY = pointerTargetY * 22 + pointerTargetX * 9;
 
-  clampTargets();
-
-  const nextViewportLeft = mapViewport.scrollLeft + (targetScrollLeft - mapViewport.scrollLeft) * 0.13;
-  const nextViewportTop = mapViewport.scrollTop + (targetScrollTop - mapViewport.scrollTop) * 0.13;
-  mapViewport.scrollLeft = nextViewportLeft;
-  mapViewport.scrollTop = nextViewportTop;
-
-  const sourceLeft = mapViewport.scrollLeft;
-  const sourceTop = mapViewport.scrollTop;
-
-  bgScrollLeft += (sourceLeft - bgScrollLeft) * 0.14;
-  bgScrollTop += (sourceTop - bgScrollTop) * 0.14;
-
-  titleScrollLeft += (sourceLeft - titleScrollLeft) * 0.075;
-  titleScrollTop += (sourceTop - titleScrollTop) * 0.075;
-
-  objectScrollLeft += (sourceLeft - objectScrollLeft) * 0.03;
-  objectScrollTop += (sourceTop - objectScrollTop) * 0.03;
-
-  noteScrollLeft += (sourceLeft - noteScrollLeft) * 0.045;
-  noteScrollTop += (sourceTop - noteScrollTop) * 0.045;
+  bgShiftStateX += (bgTargetX - bgShiftStateX) * 0.08;
+  bgShiftStateY += (bgTargetY - bgShiftStateY) * 0.08;
+  titleShiftStateX += (titleTargetX - titleShiftStateX) * 0.055;
+  titleShiftStateY += (titleTargetY - titleShiftStateY) * 0.055;
+  objectShiftStateX += (objectTargetX - objectShiftStateX) * 0.032;
+  objectShiftStateY += (objectTargetY - objectShiftStateY) * 0.032;
+  noteShiftStateX += (noteTargetX - noteShiftStateX) * 0.042;
+  noteShiftStateY += (noteTargetY - noteShiftStateY) * 0.042;
 
   updateParallax();
   updateTooltipPosition(activeObject);
 
-  const viewportDone = Math.abs(targetScrollLeft - mapViewport.scrollLeft) < 0.18 && Math.abs(targetScrollTop - mapViewport.scrollTop) < 0.18;
-  const bgDone = Math.abs(sourceLeft - bgScrollLeft) < 0.08 && Math.abs(sourceTop - bgScrollTop) < 0.08;
-  const titleDone = Math.abs(sourceLeft - titleScrollLeft) < 0.08 && Math.abs(sourceTop - titleScrollTop) < 0.08;
-  const objectDone = Math.abs(sourceLeft - objectScrollLeft) < 0.08 && Math.abs(sourceTop - objectScrollTop) < 0.08;
-  const noteDone = Math.abs(sourceLeft - noteScrollLeft) < 0.08 && Math.abs(sourceTop - noteScrollTop) < 0.08;
+  const done = [
+    Math.abs(bgTargetX - bgShiftStateX),
+    Math.abs(bgTargetY - bgShiftStateY),
+    Math.abs(titleTargetX - titleShiftStateX),
+    Math.abs(titleTargetY - titleShiftStateY),
+    Math.abs(objectTargetX - objectShiftStateX),
+    Math.abs(objectTargetY - objectShiftStateY),
+    Math.abs(noteTargetX - noteShiftStateX),
+    Math.abs(noteTargetY - noteShiftStateY),
+  ].every((value) => value < 0.08);
 
-  if (viewportDone && bgDone && titleDone && objectDone && noteDone) {
-    mapViewport.scrollLeft = targetScrollLeft;
-    mapViewport.scrollTop = targetScrollTop;
-    bgScrollLeft = titleScrollLeft = objectScrollLeft = noteScrollLeft = targetScrollLeft;
-    bgScrollTop = titleScrollTop = objectScrollTop = noteScrollTop = targetScrollTop;
-    updateParallax();
-    updateTooltipPosition(activeObject);
+  if (done && Math.abs(pointerTargetX) < 0.001 && Math.abs(pointerTargetY) < 0.001) {
     parallaxFrameId = null;
     return;
   }
@@ -371,23 +514,33 @@ const animateParallax = () => {
 };
 
 const requestParallax = () => {
-  syncScrollTargets();
-  clampTargets();
   if (parallaxFrameId !== null) return;
   parallaxFrameId = requestAnimationFrame(animateParallax);
 };
 
-const nudgeMap = (deltaX, deltaY) => {
-  targetScrollLeft += deltaX;
-  targetScrollTop += deltaY;
-  clampTargets();
-  if (parallaxFrameId === null) {
-    parallaxFrameId = requestAnimationFrame(animateParallax);
-  }
+const updateMotionPointer = (clientX, clientY) => {
+  if (!mapViewport) return;
+  const rect = mapViewport.getBoundingClientRect();
+  const relativeX = (clientX - rect.left) / Math.max(1, rect.width);
+  const relativeY = (clientY - rect.top) / Math.max(1, rect.height);
+  pointerTargetX = (relativeX - 0.5) * 2;
+  pointerTargetY = (relativeY - 0.5) * 2;
+  deskChaosPointer.active = true;
+  deskChaosPointer.x = (clientX - rect.left - stageOffsetX) / Math.max(stageScale, 0.001);
+  deskChaosPointer.y = (clientY - rect.top - stageOffsetY) / Math.max(stageScale, 0.001);
+  requestParallax();
+  requestDeskChaosFrame();
+};
+
+const clearMotionPointer = () => {
+  pointerTargetX = 0;
+  pointerTargetY = 0;
+  clearDeskChaosPointer();
+  requestParallax();
 };
 
 
-const setActiveObject = (element) => {
+const setActiveObject = (element, pointer = null) => {
   activeObject = element;
   mapHome?.classList.add('has-focus');
   mapHome?.classList.toggle('has-primary-focus', element.classList.contains('map-primary'));
@@ -399,7 +552,7 @@ const setActiveObject = (element) => {
   mapTooltipCopy.textContent = element.dataset.copy || '';
   mapTooltip.classList.add('is-visible');
   mapTooltip.setAttribute('aria-hidden', 'false');
-  updateTooltipPosition(element);
+  updateTooltipPosition(element, pointer);
 };
 
 const clearActiveObject = () => {
@@ -425,6 +578,7 @@ const enterSite = () => {
   body.classList.add('site-entered');
   window.clearInterval(landingIntervalId);
   landingGate.setAttribute('aria-hidden', 'true');
+  buildDeskChaosLayer();
   const runCenteringPass = () => {
     centerMapView();
     requestParallax();
@@ -438,7 +592,12 @@ const enterSite = () => {
 };
 
 interactiveObjects.forEach((object) => {
-  object.addEventListener('mouseenter', () => setActiveObject(object));
+  object.addEventListener('mouseenter', (event) => setActiveObject(object, { x: event.clientX, y: event.clientY }));
+  object.addEventListener('mousemove', (event) => {
+    if (activeObject === object) {
+      updateTooltipPosition(object, { x: event.clientX, y: event.clientY });
+    }
+  });
   object.addEventListener('mouseleave', () => {
     if (activeObject === object) clearActiveObject();
   });
@@ -464,9 +623,11 @@ showNextLogo();
 landingIntervalId = window.setInterval(showNextLogo, 500);
 applyResponsiveSources();
 initializeEditorLayout(currentLayoutMode);
+buildDeskChaosLayer();
 window.addEventListener('resize', () => {
   const nextMode = getLayoutMode();
   applyResponsiveSources();
+  buildDeskChaosLayer();
   if (nextMode !== currentLayoutMode) {
     initializeEditorLayout(nextMode);
     if (isLocalEditor && editorPanel && !editorPanel.hidden) fillEditorInputs();
@@ -477,6 +638,7 @@ window.addEventListener('resize', () => {
 window.addEventListener('load', () => {
   currentLayoutMode = getLayoutMode();
   initializeEditorLayout(currentLayoutMode);
+  buildDeskChaosLayer();
   centerMapView();
   requestParallax();
   if (isLocalEditor) {
@@ -494,48 +656,27 @@ landingGate?.addEventListener('keydown', (event) => {
   }
 });
 
-mapViewport?.addEventListener('mousedown', (event) => {
-  if (event.button !== 0 || event.target.closest('.map-object')) return;
-  isDragging = true;
-  dragMoved = false;
-  dragStartX = event.clientX;
-  dragStartY = event.clientY;
-  dragScrollLeft = mapViewport.scrollLeft;
-  dragScrollTop = mapViewport.scrollTop;
-  mapViewport.classList.add('is-dragging');
+mapViewport?.addEventListener('mousemove', (event) => {
+  updateMotionPointer(event.clientX, event.clientY);
 });
 
-window.addEventListener('mousemove', (event) => {
-  if (!isDragging || !mapViewport) return;
-  const dx = event.clientX - dragStartX;
-  const dy = event.clientY - dragStartY;
-  if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved = true;
-  targetScrollLeft = dragScrollLeft - dx;
-  targetScrollTop = dragScrollTop - dy;
-  clampTargets();
-  if (parallaxFrameId === null) {
-    parallaxFrameId = requestAnimationFrame(animateParallax);
-  }
+mapViewport?.addEventListener('mouseleave', () => {
+  clearMotionPointer();
 });
 
-window.addEventListener('mouseup', () => {
-  isDragging = false;
-  mapViewport?.classList.remove('is-dragging');
-  window.setTimeout(() => {
-    dragMoved = false;
-  }, 10);
-});
+mapViewport?.addEventListener('touchmove', (event) => {
+  const touch = event.touches[0];
+  if (!touch) return;
+  updateMotionPointer(touch.clientX, touch.clientY);
+}, { passive: true });
 
-mapViewport?.addEventListener('wheel', (event) => {
-  event.preventDefault();
-  nudgeMap(event.deltaX, event.deltaY);
-}, { passive: false });
+mapViewport?.addEventListener('touchend', () => {
+  clearMotionPointer();
+}, { passive: true });
 
-mapViewport?.addEventListener('scroll', () => {
-  if (isDragging || parallaxFrameId !== null) return;
-  requestParallax();
-});
-
+mapViewport?.addEventListener('touchcancel', () => {
+  clearMotionPointer();
+}, { passive: true });
 
 if (isLocalEditor && editorTarget) {
   editorTarget.addEventListener('change', fillEditorInputs);
@@ -545,11 +686,13 @@ if (isLocalEditor && editorTarget) {
   editorResetTarget?.addEventListener('click', () => {
     const key = editorTarget.value;
     applyEditorTransform(editorTargets[key], key, editorDefaults[currentLayoutMode][key]);
+    if (key === "mapTitle") buildDeskChaosLayer();
     saveEditorLayout();
     fillEditorInputs();
   });
   editorResetAll?.addEventListener('click', () => {
     Object.entries(editorDefaults[currentLayoutMode]).forEach(([key, values]) => applyEditorTransform(editorTargets[key], key, values));
+    buildDeskChaosLayer();
     localStorage.removeItem(getEditorStorageKey(currentLayoutMode));
     fillEditorInputs();
   });

@@ -1,3 +1,13 @@
+
+if (pageBody.classList.contains('page-body') && !document.querySelector('.page-corner-logo')) {
+  pageBody.insertAdjacentHTML('afterbegin', `
+    <a class="page-corner-logo" href="./index.html#story" aria-label="go back to azic home">
+      <img src="./assets/images/landing-logos/Group 24.png" alt="azic logo" />
+      <span>근데 할 거야</span>
+    </a>
+  `);
+}
+
 const pageBody = document.body;
 const pageType = pageBody.dataset.page;
 
@@ -140,4 +150,95 @@ if (pageType === 'page4') {
   });
 
   renderFeed();
+}
+
+
+if (pageType === 'page1') {
+  const archiveRail = document.getElementById('aboutArchiveRail');
+  const archiveTrack = document.getElementById('aboutArchiveTrack');
+  const archiveUpload = document.getElementById('aboutArchiveUpload');
+  const aboutModal = document.getElementById('aboutModal');
+  const aboutModalImage = document.getElementById('aboutModalImage');
+  const aboutModalClose = document.getElementById('aboutModalClose');
+  const ARCHIVE_KEY = 'azic-about-archive-v1';
+  const baseArchive = [
+    './assets/images/about-assets/이미지 아카이빙 존/overview.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-1.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-2.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-3.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-4.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-5.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-6.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-7.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-8.png',
+    './assets/images/about-assets/이미지 아카이빙 존/overview-9.png'
+  ];
+
+  let archivePaused = false;
+
+  const renderArchive = () => {
+    const uploaded = loadStore(ARCHIVE_KEY);
+    const images = [...baseArchive, ...uploaded];
+    archiveTrack.innerHTML = images.map((src, index) => `
+      <button class="about-archive__item" type="button" data-archive-src="${src}" aria-label="archive image ${index + 1}">
+        <img src="${src}" alt="about archive image ${index + 1}" />
+      </button>
+    `).join('');
+
+    archiveTrack.querySelectorAll('[data-archive-src]').forEach((button) => {
+      button.addEventListener('click', () => {
+        aboutModalImage.src = button.dataset.archiveSrc;
+        aboutModal.hidden = false;
+      });
+    });
+  };
+
+  const readFiles = async (files) => {
+    const toDataUrl = (blob) => new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.readAsDataURL(blob);
+    });
+    return Promise.all(Array.from(files).map(toDataUrl));
+  };
+
+  archiveUpload?.addEventListener('change', async () => {
+    const files = archiveUpload.files;
+    if (!files?.length) return;
+    const uploaded = loadStore(ARCHIVE_KEY);
+    uploaded.push(...await readFiles(files));
+    saveStore(ARCHIVE_KEY, uploaded);
+    archiveUpload.value = '';
+    renderArchive();
+  });
+
+  aboutModalClose?.addEventListener('click', () => {
+    aboutModal.hidden = true;
+    aboutModalImage.src = '';
+  });
+
+  aboutModal?.addEventListener('click', (event) => {
+    if (event.target === aboutModal) {
+      aboutModal.hidden = true;
+      aboutModalImage.src = '';
+    }
+  });
+
+  archiveRail?.addEventListener('mouseenter', () => { archivePaused = true; });
+  archiveRail?.addEventListener('mouseleave', () => { archivePaused = false; });
+  archiveRail?.addEventListener('touchstart', () => { archivePaused = true; }, { passive: true });
+  archiveRail?.addEventListener('touchend', () => { archivePaused = false; }, { passive: true });
+
+  const autoScroll = () => {
+    if (archiveRail && !archivePaused) {
+      archiveRail.scrollLeft += 0.55;
+      if (archiveRail.scrollLeft >= archiveRail.scrollWidth - archiveRail.clientWidth - 1) {
+        archiveRail.scrollLeft = 0;
+      }
+    }
+    requestAnimationFrame(autoScroll);
+  };
+
+  renderArchive();
+  requestAnimationFrame(autoScroll);
 }

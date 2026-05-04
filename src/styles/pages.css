@@ -1,8 +1,9 @@
 .page-body {
-  background: var(--paper);
+  background: #ffffff;
   color: var(--ink);
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .page-shell {
@@ -137,7 +138,7 @@
 .story-copy .story-lead {
   font-size: 1.3rem;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .story-aside,
@@ -297,5 +298,486 @@
   .page-footer {
     flex-direction: column;
     gap: 8px;
+  }
+}
+
+
+.page-corner-logo {
+  left: 24px;
+  position: fixed;
+  text-decoration: none;
+  top: 20px;
+  z-index: 60;
+}
+
+.page-corner-logo img {
+  display: block;
+  filter: brightness(0) saturate(100%);
+  width: 108px;
+}
+
+.page-corner-logo span {
+  color: #211a10;
+  display: block;
+  font-family: "YoonChildfundkoreaManSeh", cursive;
+  font-size: 1.1rem;
+  margin-top: 6px;
+}
+
+.about-page {
+  background: #ffffff;
+}
+
+.about-main {
+  padding: 0 0 88px;
+}
+
+
+.about-hero {
+  background: #3f3f3f;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+
+
+.about-hero__media {
+  background: #3f3f3f;
+  height: 100%;
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.about-hero__video {
+  display: block;
+  filter: grayscale(1);
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: center center;
+  position: absolute;
+  width: 100%;
+}
+
+
+
+
+
+.about-hero__frame {
+  filter: grayscale(1) brightness(0.54) contrast(1.04);
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
+  position: absolute;
+  transform: scale(1.03);
+  transition: opacity 900ms ease;
+  width: 100%;
+}
+
+
+
+.about-hero__frame.is-front {
+  opacity: 1;
+}
+
+.about-hero__overlay {
+  align-items: flex-start;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  inset: 0;
+  justify-content: flex-end;
+  padding: 0 0 52px 80px;
+  position: absolute;
+  z-index: 4;
+}
+
+
+
+.about-copy__headline {
+  color: #ffffff;
+  font-family: "YoonChildfundkoreaManSeh", cursive;
+  font-size: clamp(4.24rem, 6vw, 6.94rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 9ch;
+}
+
+
+.about-copy__body {
+  display: grid;
+  gap: 22px;
+  max-width: 640px;
+}
+
+
+.about-copy__body--hero {
+  margin-top: 34px;
+}
+
+
+.about-copy__body p {
+  color: #ffffff;
+  font-family: "Pretendard Variable", "Pretendard", sans-serif;
+  font-size: clamp(0.86rem, 1.04vw, 1.18rem);
+  font-variation-settings: "wght" 450;
+  line-height: 1.45;
+  margin: 0;
+}
+
+
+.about-audience {
+  display: grid;
+  gap: 72px;
+  margin: 112px auto 0;
+  max-width: 1320px;
+  padding: 0 56px;
+}
+
+.about-audience__intro {
+  display: flex;
+  justify-content: center;
+}
+
+.about-audience__intro h2,
+.about-message__header h2 {
+  font-family: "YoonChildfundkoreaManSeh", cursive;
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.12;
+  margin: 0;
+  text-align: center;
+}
+
+.about-audience__names {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.about-audience__names p {
+  font-family: "Pretendard Variable", "Pretendard", sans-serif;
+  font-size: clamp(1.16rem, 1.8vw, 2.08rem);
+  font-variation-settings: "wght" 400;
+  line-height: 1.2;
+  margin: 0;
+  text-align: center;
+}
+
+.about-audience__names span {
+  display: block;
+  margin-top: 6px;
+}
+
+.about-audience__visual {
+  display: flex;
+  justify-content: center;
+}
+
+.about-audience__visual img {
+  display: block;
+  max-width: min(100%, 1080px);
+  width: 100%;
+}
+
+.about-audience__quotes {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.about-audience__quotes p {
+  font-family: "YoonChildfundkoreaManSeh", cursive;
+  font-size: clamp(2rem, 2.7vw, 2.92rem);
+  line-height: 1.16;
+  margin: 0;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .about-audience {
+    gap: 28px;
+    margin-top: 72px;
+    padding: 0 20px;
+  }
+
+  .about-audience__intro h2,
+  .about-message__header h2 {
+    text-align: center;
+  }
+
+  .about-audience__names,
+  .about-audience__quotes {
+    gap: 22px;
+    grid-template-columns: 1fr;
+  }
+
+  .about-audience__names p {
+    font-size: 1.36rem;
+    line-height: 1.22;
+  }
+
+  .about-audience__visual img {
+    max-width: 100%;
+  }
+
+  .about-audience__quotes {
+    margin-top: 0;
+  }
+
+  .about-audience__quotes p {
+    font-size: 2.05rem;
+    line-height: 1.18;
+  }
+}
+
+.about-message {
+  background: #b79c74;
+  border-radius: 8px;
+  margin: 96px auto 0;
+  max-width: 1280px;
+  padding: 42px 28px 36px;
+}
+
+
+.about-message__grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 28px;
+}
+
+.about-message__card {
+  background: rgba(242, 231, 218, 0.88);
+  border-radius: 8px;
+  min-height: 460px;
+  padding: 28px;
+}
+
+.about-message__text {
+  display: grid;
+  gap: 18px;
+}
+
+.about-message__text p {
+  font-family: "Pretendard Variable", "Pretendard", sans-serif;
+  font-size: clamp(1.05rem, 1.4vw, 1.56rem);
+  font-variation-settings: "wght" 400;
+  line-height: 1.72;
+  margin: 0;
+}
+
+.about-signature {
+  font-variation-settings: "wght" 700 !important;
+}
+
+.about-archive {
+  margin: 92px auto 0;
+  max-width: 1280px;
+  padding: 0 24px;
+}
+
+
+.about-archive__head {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.about-archive__swipe {
+  font-family: "Pretendard Variable", "Pretendard", sans-serif;
+  font-size: clamp(1.3rem, 2vw, 2.1rem);
+  font-variation-settings: "wght" 400;
+  margin: 0;
+}
+
+.about-archive__upload {
+  background: rgba(33, 26, 16, 0.08);
+  border: 1px solid rgba(33, 26, 16, 0.12);
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 12px 18px;
+}
+
+.about-archive__rail {
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.about-archive__rail::-webkit-scrollbar {
+  display: none;
+}
+
+.about-archive__track {
+  display: inline-flex;
+  gap: 18px;
+  min-width: max-content;
+}
+
+.about-archive__item {
+  background: rgba(255,255,255,0.34);
+  border: 1px solid rgba(33, 26, 16, 0.12);
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  overflow: hidden;
+  width: clamp(220px, 24vw, 340px);
+}
+
+.about-archive__item img {
+  aspect-ratio: 4 / 5;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.about-modal {
+  align-items: center;
+  background: rgba(12, 10, 8, 0.84);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 36px;
+  position: fixed;
+  z-index: 80;
+}
+
+.about-modal[hidden] {
+  display: none;
+}
+
+.about-modal img {
+  max-height: 88vh;
+  max-width: min(92vw, 1100px);
+}
+
+.about-modal__close {
+  background: rgba(242, 231, 218, 0.9);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  padding: 12px 16px;
+  position: absolute;
+  right: 24px;
+  top: 24px;
+}
+
+@media (max-width: 900px) {
+  .page-corner-logo {
+    left: 18px;
+    top: 16px;
+  }
+
+  .page-corner-logo img {
+    width: 82px;
+  }
+
+  .page-corner-logo span {
+    font-size: 0.95rem;
+  }
+
+  .about-main {
+    padding: 0 0 60px;
+  }
+
+  .about-hero {
+    min-height: 100svh;
+  }
+
+  .about-hero__media {
+    height: 100svh;
+  }
+
+    .about-audience,
+  .about-message,
+  .about-archive {
+    margin-top: 64px;
+  }
+
+  .about-audience__grid,
+  .about-message__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-hero__overlay {
+    padding: 0 18px 20px;
+  }
+
+  .about-copy__headline {
+    font-size: clamp(3.1rem, 12vw, 4.5rem);
+    max-width: 7ch;
+  }
+
+  .about-copy__body--hero {
+    margin-top: 22px;
+  }
+
+  .about-copy__body {
+    gap: 18px;
+    max-width: 82vw;
+  }
+
+  .about-copy__body p {
+    font-size: 0.92rem;
+    line-height: 1.56;
+  }
+
+  .about-message {
+    padding: 30px 18px 24px;
+  }
+
+  .about-message__card {
+    min-height: auto;
+    padding: 22px;
+  }
+
+  .about-archive__head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .about-archive__item {
+    width: 72vw;
+  }
+}
+
+
+.page-shell,
+.about-main,
+.page-main {
+  overflow-x: clip;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .about-audience__names {
+    gap: 14px;
+  }
+
+  .about-audience__names p {
+    font-size: 1.34rem;
+    line-height: 1.22;
+  }
+
+  .about-audience__quotes {
+    gap: 20px;
+  }
+
+  .about-audience__quotes p {
+    font-size: 2.05rem;
+    line-height: 1.18;
   }
 }

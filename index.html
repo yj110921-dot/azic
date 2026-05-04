@@ -45,15 +45,7 @@
           <div class="map-focus-layer" aria-hidden="true"></div>
 
           <div class="map-canvas" id="mapCanvas">
-            <img
-              id="mapBackground"
-              class="map-bg-art"
-              src="./assets/images/home-map/background.png"
-              alt=""
-              aria-hidden="true"
-              data-desktop-src="./assets/images/home-map/background.png"
-              data-mobile-src="./assets/images/home-map/mobile-background.png"
-            />
+            <div class="desk-chaos-layer" id="deskChaosLayer" aria-hidden="true"></div>
 
             <img
               id="mapTitle"
@@ -208,12 +200,10 @@
             <span>Target</span>
             <select id="editorTarget">
               <option value="mapTitle">Main title</option>
-              <option value="mapBackground">Background</option>
               <option value="about">About</option>
               <option value="upload">Upload</option>
               <option value="roundRobin">Round-robin</option>
               <option value="product">Product</option>
-              <option value="cornerLogo">Corner logo</option>
             </select>
           </label>
           <label class="editor-panel__field">

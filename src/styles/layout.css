@@ -30,35 +30,40 @@
 }
 
 .map-viewport {
-  cursor: grab;
-  height: 100vh;
-  overflow: auto;
+  height: 100dvh;
+  overflow: hidden;
   overscroll-behavior: none;
   position: relative;
-  touch-action: pan-x pan-y;
+  touch-action: none;
   width: 100vw;
-}
-
-.map-viewport.is-dragging {
-  cursor: grabbing;
-  user-select: none;
 }
 
 .map-canvas {
   height: 3400px;
-  position: relative;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform-origin: top left;
   width: 4300px;
+  will-change: transform;
 }
 
-.map-bg-art {
-  left: 50%;
-  opacity: 1;
+.desk-chaos-layer {
+  inset: 0;
+  pointer-events: none;
   position: absolute;
-  top: 40px;
-  transform: translate3d(calc(-50% + var(--bg-shift-x)), var(--bg-shift-y), 0) scale(var(--editor-scale, 1));
+  z-index: 2;
+}
+
+.desk-chaos-item {
+  left: 0;
+  opacity: 0.96;
+  position: absolute;
+  top: 0;
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  transform-origin: center center;
   transition: opacity 220ms ease, filter 220ms ease;
-  width: 3978px;
-  z-index: 1;
+  will-change: transform;
 }
 
 .map-title-art {
@@ -83,20 +88,7 @@
 }
 
 .map-home.has-focus .map-focus-layer {
-  background: rgba(17, 12, 7, 0.06);
-}
-
-.map-home.has-primary-focus .map-bg-art,
-.map-home.has-primary-focus .map-title-art,
-.map-home.has-primary-focus .map-note,
-.map-home.has-primary-focus .map-primary:not(.is-active) {
-  filter: blur(10px);
-  opacity: 0.5;
-}
-
-.map-home.has-primary-focus .map-primary.is-active {
-  filter: none;
-  opacity: 1;
+  background: transparent;
 }
 
 .map-tooltip {
@@ -152,13 +144,6 @@
   .map-canvas {
     height: 2900px;
     width: 2200px;
-  }
-
-  .map-bg-art {
-    left: 50%;
-    top: 760px;
-    width: 387px;
-    transform: translate3d(calc(-50% + var(--bg-shift-x)), var(--bg-shift-y), 0) scale(var(--editor-scale, 1));
   }
 
   .map-title-art {

@@ -3,55 +3,91 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>azic | 브랜드 스토리</title>
+    <title>azic | about</title>
     <link rel="stylesheet" href="./src/styles/base.css" />
     <link rel="stylesheet" href="./src/styles/pages.css" />
   </head>
-  <body class="page-body" data-page="page1">
-    <div class="page-shell">
-      <header class="page-header">
-        <div class="page-header__brand">
-          <img src="./assets/images/landing-logos/Group 24.png" alt="azic logo" />
-          <div class="page-header__copy">
-            <strong>Page 1 / About</strong>
-            <span>읽지 못한 책이 아니라, 읽고자 했던 마음을 바라보는 페이지</span>
+  <body class="page-body about-page" data-page="page1">
+    <main class="about-main">
+      <section class="about-hero" aria-label="about hero visual">
+        <div class="about-hero__media">
+          <video class="about-hero__video" src="./assets/video/about-hero.mp4" autoplay muted loop playsinline preload="auto" aria-label="azic about hero video"></video>
+        </div>
+        <div class="about-hero__overlay">
+          <h1 class="about-copy__headline">“아직!<br />근데 할거야!”</h1>
+          <div class="about-copy__body about-copy__body--hero">
+            <p>브랜드 azic은 책은 사지만, 읽지 못하고 쌓아두는 사람들과 함께 합니다.<br />읽지 못한 책이 아니라 읽고자 했던 마음을 긍정하는 브랜드입니다.</p>
+            <p>책을 읽는 일의 목적이 완독에만 있는 것은 아닙니다.<br />독서를 하고자 했던 의지, 그로 인한 행동,<br />미루지만 결국 언젠가는 하겠다는 모든 마음이 가치가 있습니다.</p>
+            <p>작은 개인의 행동에서 출발해<br />사람과 사람 사이를 연결하고, 더 나아가 사회적인 독서 문화로 확장되는 활동을 만듭니다.</p>
+            <p>책갈피 하나, 짧은 문장, 작은 참여로도 누구나 책과 이어질 수 있도록.</p>
+            <p>우리는 읽지 못한 페이지를 탓하지 않고, 다시 펼칠 수 있는 순간을 만듭니다.</p>
           </div>
         </div>
-        <a class="page-back" href="./index.html#story">azic world로 돌아가기</a>
-      </header>
-      <main class="page-main">
-        <section class="page-hero">
-          <p class="page-hero__eyebrow">Brand Story</p>
-          <h1>책은 사지만 읽지 못하는 책 수집가를 위한 브랜드</h1>
-          <p>azic은 완독하지 못한 책의 죄책감이 아니라, 언젠가 그 책을 펼치고 싶어 했던 마음 자체를 브랜드의 시작점으로 바라봅니다.</p>
-        </section>
+      </section>
 
-        <section class="page-section story-grid">
-          <div class="story-copy">
-            <p class="story-lead">브랜드 azic은 책은 사지만, 읽지 못하고 쌓아두는 사람들과 함께 합니다.</p>
-            <p>우리는 책을 읽지 않고 쌓아두는 것이 잘못이라거나 문제라고 생각하지 않습니다. 책을 읽는 일의 목적이 완독에만 있는 것은 아니니까요.</p>
-            <p>독서를 하고자 했던 의지, 그로 인한 행동, 미루지만 결국 언젠가는 하겠다는 모든 마음이 가치가 있습니다. 그래서 우리는 책을 의무가 아닌 일상의 일부로 다시 디자인하고자 합니다.</p>
-            <p>작은 개인의 행동에서 출발해 사람과 사람 사이를 연결하고, 더 나아가 사회적인 독서 문화로 확장되는 활동을 만듭니다. 책갈피 하나, 짧은 문장, 작은 참여로도 누구나 책과 이어질 수 있도록.</p>
-            <p>우리는 읽지 못한 책이 아니라 읽고자 했던, 시도하고자 했던 마음을 긍정하는 데에서 시작합니다.</p>
-            <p class="story-lead">‘아직’ 읽어내지 못한 책들이 있다면 브랜드 ‘아직’과 함께 해보시겠어요?</p>
-          </div>
-          <aside class="story-aside">
-            <h2 class="page-section__title">Keywords</h2>
-            <div>
-              <span class="quote-chip">읽고자 했던 마음</span>
-              <span class="quote-chip">쌓여 있는 책</span>
-              <span class="quote-chip">의무가 아닌 독서</span>
-              <span class="quote-chip">작은 참여</span>
+      <section class="about-audience">
+        <div class="about-audience__intro">
+          <h2>이러한 당신에게</h2>
+        </div>
+        <div class="about-audience__names">
+          <p>도파민 결제러<br /><span>The Dopamine Buyer</span></p>
+          <p>서문 사냥꾼<br /><span>The Preface Hunter</span></p>
+          <p>벽돌책 수호자<br /><span>The Brick-Book Guardian</span></p>
+        </div>
+        <div class="about-audience__visual">
+          <img src="./assets/images/about-assets/고객층/고객층.png" alt="azic target audience" />
+        </div>
+        <div class="about-audience__quotes">
+          <p>교양 쌓는데에<br />투자하는 건데 뭐</p>
+          <p>핵심은 이미<br />파악했다!</p>
+          <p>언젠가 이 책들이<br />내 머릿속으로 들어오겠지</p>
+        </div>
+      </section>
+
+      <section class="about-message">
+        <div class="about-message__header">
+          <h2>삼예일세가 전하는 메세지</h2>
+        </div>
+        <div class="about-message__grid">
+          <article class="about-message__card">
+            <div class="about-message__text">
+              <p>여러분 다들 서점 좋아하세요?</p>
+              <p>저는 진짜 좋아해요. 맨날 가면 2-3권은 기본으로 책 사 오거든요?<br />근데, 생각보다 시간도 없고 저 같은 경우는 책 읽는 속도도 느려서 자꾸 쌓이기만 해요.<br />이미 책장은 다 찼음..<br />근데 요즘 저 같은 사람이 많다고 그러더라구요? ‘적독가'라던가?</p>
+              <p>그래서 브랜드를 만들었습니다.</p>
+              <p>이러한 바이러스 같은 적독 현상을 타파하고,<br />혹은 그 바이러스와 잘 공생해 살아봐도 재밌잖아요?</p>
+              <p>너무 부담스러워하지 말고 우리 다 당당하게!!<br />아직 안 읽었다고 말해봅시다. 하지만 언젠가는 읽을 것이라고.</p>
+              <p>우리는 못하는 사람들이 아니라, 언젠가 반드시 해낼 가능성을 지닌 사람들이니까요.</p>
+              <p class="about-signature">-azic 예진</p>
             </div>
-            <div class="image-placeholder">브랜드 스토리 이미지는 추후 여기에 삽입할 수 있어요.</div>
-          </aside>
-        </section>
-        <footer class="page-footer">
-          <span>azic world</span>
-          <span>책을 다 읽지 못해도, 마음은 남습니다.</span>
-        </footer>
-      </main>
+          </article>
+          <article class="about-message__card">
+            <div class="about-message__text">
+              <p>책 냄새가 좋아.<br />책들이 잔뜩 꽂힌 책장이 좋아.<br />서점에 가면 마음이 편안해지는 것 같고<br />잠깐 똑똑한 척하면서 책 사기도 재밌어.</p>
+              <p>근데 왜 안 읽냐고 뭐라하지 마요.</p>
+              <p>마음 내킬 때 읽을 거니까.</p>
+              <p class="about-signature">-azic 세빈</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="about-archive">
+        <div class="about-archive__head">
+          <p class="about-archive__swipe">← swip</p>
+          <label class="about-archive__upload" for="aboutArchiveUpload">image upload</label>
+          <input id="aboutArchiveUpload" type="file" accept="image/*" multiple hidden />
+        </div>
+        <div class="about-archive__rail" id="aboutArchiveRail">
+          <div class="about-archive__track" id="aboutArchiveTrack"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="about-modal" id="aboutModal" hidden>
+      <button class="about-modal__close" id="aboutModalClose" type="button" aria-label="close image">close</button>
+      <img id="aboutModalImage" src="" alt="expanded archive image" />
     </div>
+
     <script src="./src/scripts/pages.js"></script>
   </body>
 </html>
