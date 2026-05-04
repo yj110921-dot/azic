@@ -648,24 +648,24 @@
 }
 
 .about-message__photo--yejin-main {
-  right: 72px;
-  top: 120px;
+  left: 831.31px;
+  top: 27.75px;
   transform: rotate(9deg);
-  width: 400px;
+  width: 531.34px;
 }
 
 .about-message__photo--yejin-side {
-  right: 102px;
-  top: 456px;
+  left: 856.64px;
+  top: 377.8px;
   transform: rotate(-9deg);
-  width: 340px;
+  width: 480.68px;
 }
 
 .about-message__photo--sebin {
-  left: 96px;
-  top: 930px;
+  left: 78.34px;
+  top: 912.54px;
   transform: rotate(-2deg);
-  width: 246px;
+  width: 281.26px;
   z-index: 4;
 }
 
@@ -677,25 +677,25 @@
 }
 
 .about-message__photo--yeji-main {
-  left: 706px;
-  top: 1716px;
-  transform: rotate(7deg);
-  width: 262px;
+  left: 864px;
+  top: 1657px;
+  transform: rotate(0deg);
+  width: 293px;
   z-index: 4;
 }
 
 .about-message__photo--yeji-side {
-  left: 286px;
-  top: 2048px;
+  left: 262.69px;
+  top: 2010.94px;
   transform: rotate(-7deg);
-  width: 318px;
+  width: 364.57px;
 }
 
 .about-message__photo--yewon {
-  left: 74px;
-  top: 2608px;
+  left: 58.47px;
+  top: 2582.4px;
   transform: rotate(-6deg);
-  width: 254px;
+  width: 285.02px;
   z-index: 4;
 }
 
@@ -710,28 +710,28 @@
   left: 20px;
   padding: 56px 48px 48px;
   top: 214px;
-  width: min(100%, 760px);
+  width: 693px;
 }
 
 .about-message__note--sebin {
-  top: 978px;
+  left: 803px;
+  top: 1047px;
   padding: 34px 32px 30px;
-  right: 82px;
-  width: min(100%, 484px);
+  width: 484px;
 }
 
 .about-message__note--yeji {
-  left: 86px;
+  left: 116px;
   padding: 30px 28px 26px;
-  top: 1708px;
-  width: min(100%, 248px);
+  top: 1918px;
+  width: 218px;
 }
 
 .about-message__note--yewon {
-  top: 2638px;
+  left: 817px;
+  top: 2255px;
   padding: 34px 32px 30px;
-  right: 42px;
-  width: min(100%, 510px);
+  width: 500px;
 }
 
 .about-message__text {
