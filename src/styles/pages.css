@@ -279,88 +279,6 @@
 }
 
 
-.about-message__editable.is-selected {
-  outline: 2px dashed rgba(226, 32, 32, 0.92);
-  outline-offset: 6px;
-}
-
-.about-message-editor {
-  background: rgba(255, 249, 241, 0.96);
-  border: 1px solid rgba(33, 26, 16, 0.14);
-  border-radius: 14px;
-  bottom: 24px;
-  box-shadow: 0 18px 40px rgba(33, 26, 16, 0.18);
-  color: #211a10;
-  padding: 14px;
-  position: fixed;
-  right: 24px;
-  width: 240px;
-  z-index: 120;
-}
-
-.about-message-editor[hidden] {
-  display: none;
-}
-
-.about-message-editor__header {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.about-message-editor__header strong {
-  font-size: 0.95rem;
-}
-
-.about-message-editor__header span,
-.about-message-editor__hint {
-  color: rgba(33, 26, 16, 0.58);
-  font-size: 0.72rem;
-}
-
-.about-message-editor__field {
-  display: grid;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.about-message-editor__field span {
-  font-size: 0.76rem;
-  font-weight: 600;
-}
-
-.about-message-editor__field input,
-.about-message-editor__field select,
-.about-message-editor__actions button,
-.about-message-editor__copy {
-  appearance: none;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(33, 26, 16, 0.14);
-  border-radius: 8px;
-  color: inherit;
-  font: inherit;
-  min-height: 36px;
-  padding: 0 10px;
-  width: 100%;
-}
-
-.about-message-editor__actions {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: 1fr 1fr;
-  margin: 10px 0 8px;
-}
-
-.about-message-editor__copy {
-  text-align: center;
-}
-
-@media (max-width: 900px) {
-  .about-message-editor {
-    display: none;
-  }
-}
 
 @media (max-width: 900px) {
   .page-header {
@@ -638,6 +556,22 @@
 .about-message__canvas {
   min-height: 2660px;
   position: relative;
+}
+
+
+.about-message__canvas--single {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: auto;
+  padding: 18px 0 6px;
+}
+
+.about-message__single-image {
+  display: block;
+  max-width: min(100%, 1080px);
+  width: 100%;
+  height: auto;
 }
 
 .about-message__photo {
